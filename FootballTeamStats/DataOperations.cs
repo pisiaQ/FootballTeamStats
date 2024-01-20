@@ -9,7 +9,7 @@
 
             for (int i = 0; i < 5; i++)
             {
-                Console.WriteLine($"Enter the number of goals in match {i + 1} (or WALK for 0 goals):");
+                Console.WriteLine($"Enter the number of goals in match {i + 1} between 0 and 10 (or WALK for 0 goals):");
                 string input = Console.ReadLine();
 
                 if (input.ToLower() == "walk")
@@ -23,7 +23,7 @@
                 }
                 else
                 {
-                    Console.WriteLine("Invalid data format. Enter a number between 0 and 10 or 'WALK'.\n");
+                    Console.WriteLine("Incorrect data phrase. Enter a number between 0 and 10 or 'WALK'.\n");
                     i--;
                 }
             }
@@ -41,11 +41,11 @@
 
             Console.WriteLine("Teams ranking:\n");
 
-            int position = 1;
+            int location = 1;
 
             foreach (var team in teams.OrderByDescending(t => t.GetTotalGoals()))
             {
-                Console.WriteLine($"Position {position}: Team: {team.Name}");
+                Console.WriteLine($"Position {location}: Team: {team.Name}");
                 Console.WriteLine($"Min. goals: {team.GetMinGoals()}");
                 Console.WriteLine($"Max. goals: {team.GetMaxGoals()}");
                 double averageGoals = team.GetAverageGoals();
@@ -53,7 +53,7 @@
 
                 char grade = team.GetAverageGrade();
                 Console.WriteLine($"Average grade: {grade}\n");
-                position++;
+                location++;
             }
         }
     }
