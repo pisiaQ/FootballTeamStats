@@ -1,6 +1,5 @@
 ﻿namespace FootballTeamStats
 {
-
     class DataOperations
     {
         public static int[] ReadGoals()

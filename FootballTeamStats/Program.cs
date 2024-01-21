@@ -1,4 +1,5 @@
 ﻿using FootballTeamStats;
+
 class  FootballTeamStatistics
 {
     public delegate void AddTeamHandler(IScorable team);
@@ -12,11 +13,12 @@ class  FootballTeamStatistics
         while (true)
         {
             
-            Console.WriteLine("Menu:");
-            Console.WriteLine("1. Add football team\n");
-            Console.WriteLine("2. Display statistics\n");
-            Console.WriteLine("3. Save to memory/file\n");
-            Console.WriteLine("Q. Quit the application\n");
+            Console.WriteLine("-------=MENU=-------\n");
+            Console.WriteLine("Select a number to:\n");
+            Console.WriteLine("1. Add football team and number of goals for 5 matches.\n");
+            Console.WriteLine("2. Display statistics.\n");
+            Console.WriteLine("3. Save to memory/file.\n");
+            Console.WriteLine("Q or q. Quit the application.\n");
 
             char choice = Console.ReadKey().KeyChar;
             Console.WriteLine();
