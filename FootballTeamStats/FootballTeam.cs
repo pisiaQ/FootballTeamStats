@@ -1,6 +1,6 @@
 ﻿namespace FootballTeamStats
 {
-    class FootballTeam : SportsTeamBase
+    public class FootballTeam : SportsTeamBase
     {
         public FootballTeam(string name, int[] goals) : base(name, goals)
         {
