@@ -1,6 +1,6 @@
 ﻿namespace FootballTeamStats
 {
-    class FileOperations
+   public class FileOperations
     {
         public static void SaveData(List<IScorable> teams)
         {
