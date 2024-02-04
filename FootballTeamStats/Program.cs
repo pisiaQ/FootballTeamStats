@@ -1,61 +1,101 @@
 ﻿using FootballTeamStats;
 
-class  FootballTeamStatistics
+class FBTS
 {
-    public delegate void AddTeamHandler(IScorable team);
-
-    public static event AddTeamHandler TeamAdded;
-
     static void Main()
     {
-        List<IScorable> teams = new List<IScorable>();
-        Console.WriteLine("Welcome to the program for displaying statistics of football teams!\n");
+        Console.WriteLine("Welcome to Team Statistics Program!");
+
+        var teams = new List<ITeam>();
+
         while (true)
         {
-            
-            Console.WriteLine("-------=MENU=-------\n");
-            Console.WriteLine("Select a number to:\n");
-            Console.WriteLine("1. Add football team and number of goals for 5 matches.\n");
-            Console.WriteLine("2. Display statistics.\n");
-            Console.WriteLine("3. Save to memory/file.\n");
-            Console.WriteLine("Q or q. Quit the application.\n");
+            Console.WriteLine("Menu:");
+            Console.WriteLine("1. Add Team");
+            Console.WriteLine("2. Enter Goals for Teams");
+            Console.WriteLine("3. Display Statistics for Teams");
+            Console.WriteLine("Q. Quit");
 
-            char choice = Console.ReadKey().KeyChar;
-            Console.WriteLine();
+            Console.Write("Select an option: ");
+            string choice = Console.ReadLine().ToUpper();
 
             switch (choice)
             {
-                case '1':
+                case "1":
                     AddTeam(teams);
                     break;
-                case '2':
-                    DataOperations.DisplayStatistics(teams);
+                case "2":
+                    EnterGoalsForTeams(teams);
                     break;
-                case '3':
-                    FileOperations.SaveData(teams);
+                case "3":
+                    DisplayStatisticsForAllTeams(teams);
                     break;
-                case 'Q':
-                case 'q':
-                    return;
+                case "Q":
+                    Console.WriteLine("Exiting the program...");
+                    Environment.Exit(0);
+                    break;
                 default:
-                    Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
         }
     }
-    static void AddTeam(List<IScorable> teams)
+
+    private static void AddTeam(List<ITeam> teams)
     {
-        Console.WriteLine("Enter the name of the football team:");
+        Console.Write("Enter name for the team: ");
         string teamName = Console.ReadLine();
+        var team = new TeamInFile(teamName);
+        team.GoalAdded += TeamGoalAdded;
+        teams.Add(team);
+        Console.WriteLine($"Team {teamName} added successfully!");
+    }
 
-        int[] goals = DataOperations.ReadGoals();
+    private static void TeamGoalAdded(object sender, EventArgs args)
+    {
+        Console.WriteLine("Goal added to the team!");
+    }
 
-        FootballTeam newTeam = new FootballTeam(teamName, goals);
-        teams.Add(newTeam);
+    private static void EnterGoalsForTeams(List<ITeam> teams)
+    {
+        Console.WriteLine("Adding goals for teams...");
 
-        TeamAdded?.Invoke(newTeam);
+        foreach (var team in teams)
+        {
+            AddGoalsForMatches(team, 5);
+            Console.WriteLine();
+        }
+    }
 
-        Console.WriteLine($"Team {teamName} added with match results: {string.Join(", ", goals)}");
-        Console.WriteLine("Team added successfully!");
+    private static void AddGoalsForMatches(ITeam team, int numberOfMatches)
+    {
+        for (int matchNumber = 1; matchNumber <= numberOfMatches; matchNumber++)
+        {
+            Console.Write($"Enter goals for match {matchNumber} for {team.TeamName}: ");
+            string input = Console.ReadLine();
+
+            if (int.TryParse(input, out int goals) && goals >= 0 && goals <= 10)
+            {
+                team.AddGoal(goals);
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number of goals between 0 and 10.");
+                matchNumber--;
+            }
+        }
+    }
+
+    private static void DisplayStatisticsForAllTeams(List<ITeam> teams)
+    {
+        Console.WriteLine("Statistics for all teams (sorted by total goals):\n");
+
+        // Sortowanie zespołów według sumy goli (DESCENDING)
+        var sortedTeams = teams.OrderByDescending(team => (team as TeamBase)?.TeamTotalGoals ?? 0).ToList();
+
+        foreach (var team in sortedTeams)
+        {
+            team.DisplayTeamStatistics();
+        }
     }
 }
