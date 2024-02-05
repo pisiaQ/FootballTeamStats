@@ -2,40 +2,23 @@
 {
     public class TeamInFile : TeamBase
     {
-        private const string FileName = "goals.txt";
+        private string FileName;
 
         public TeamInFile(string teamName)
             : base(teamName)
         {
+            FileName = $"{teamName.ToLower()}_goals.txt"; //nazwa zespołu w nazwie pliku (tworzy pliki z nazwą zespołu)
         }
 
         public override void AddGoal(int goals)
         {
-            try
+            using (var writer = File.AppendText(FileName))
             {
-                File.AppendAllText(FileName, $"{TeamName}: {goals}\n");
-                base.OnGoalAdded();
-                base.AddToTeamGoalSum(goals);
+                writer.WriteLine(goals);
+            }
+            base.OnGoalAdded();
 
-                Console.WriteLine($"Goals added to {TeamName}. Data saved to file: {FileName}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while writing to the file: {ex.Message}");
-            }
-        }
-
-        public void SaveToFile()
-        {
-            try
-            {
-                File.WriteAllText(FileName, $"{TeamName}: Data saved to file\n");
-                Console.WriteLine($"Data saved to file for {TeamName}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while saving to file: {ex.Message}");
-            }
+            Console.WriteLine($"Goals added to {TeamName}. Data saved to file: {FileName}");
         }
 
         public override Statistics GetTeamStatistics()
@@ -50,24 +33,17 @@
 
             if (File.Exists(FileName))
             {
-                try
+                using (var reader = File.OpenText(FileName))
                 {
-                    using (var reader = File.OpenText(FileName))
-                    {
-                        string line;
+                    string line;
 
-                        while ((line = reader.ReadLine()) != null)
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (float.TryParse(line, out float goal))
                         {
-                            if (float.TryParse(line.Split(':')[1].Trim(), out float goal))
-                            {
-                                goals.Add(goal);
-                            }
+                            goals.Add(goal);
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An error occurred while reading from the file: {ex.Message}");
                 }
             }
 

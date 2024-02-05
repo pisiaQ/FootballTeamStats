@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FootballTeamStats
+﻿namespace FootballTeamStats
 {
     public class Statistics
     {
