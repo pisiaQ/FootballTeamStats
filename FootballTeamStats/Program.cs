@@ -10,6 +10,7 @@ class FBTS
         var teams = new List<ITeam>();
 
         Console.Write("Enter the number of teams: ");
+
         if (int.TryParse(Console.ReadLine(), out int numberOfTeams) && numberOfTeams > 0)
         {
             for (int i = 0; i < numberOfTeams; i++)
