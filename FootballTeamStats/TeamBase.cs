@@ -15,7 +15,7 @@
         }
 
         public abstract void AddGoal(int goals);
-        public void AddGoal(int[] goals) //przeciążenie metody addgoal
+        public void AddGoal(int[] goals)
         {
             foreach (var goal in goals)
             {

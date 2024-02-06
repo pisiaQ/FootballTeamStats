@@ -4,42 +4,55 @@ class FBTS
 {
     static void Main()
     {
-        Console.WriteLine("Welcome to Team Statistics Program!");
-        Console.WriteLine("===================================");
+        Console.WriteLine("============================================");
+        Console.WriteLine("Welcome to Football Team Statistics Program!");
+        Console.WriteLine("============================================\n");
 
         var teams = new List<ITeam>();
 
-        Console.Write("Enter the number of teams: ");
-
-        if (int.TryParse(Console.ReadLine(), out int numberOfTeams) && numberOfTeams > 0)
+        while (true)
         {
-            for (int i = 0; i < numberOfTeams; i++)
+            Console.Write("Enter the number of teams or type 'Q' to quit: ");
+            string input = Console.ReadLine();
+
+            if (input.ToUpper() == "Q")
             {
-                Console.Write($"Enter name for team {i + 1}: ");
-                string teamName = Console.ReadLine();
-                var team = new TeamInFile(teamName);
-                team.GoalAdded += TeamGoalAdded;
-                teams.Add(team);
+                Console.WriteLine("Exiting the program...");
+                break;
             }
 
-            foreach (var team in teams)
+            if (int.TryParse(input, out int numberOfTeams) && numberOfTeams > 0)
             {
-                AddGoalsForMatches(team, 5);
-                Console.WriteLine();
-            }
+                for (int i = 0; i < numberOfTeams; i++)
+                {
+                    Console.Write($"Enter name for team {i + 1}: ");
+                    string teamName = Console.ReadLine();
+                    var team = new TeamInFile(teamName);
+                    team.GoalAdded += TeamGoalAdded;
+                    teams.Add(team);
+                }
 
-            foreach (var team in teams)
+                foreach (var team in teams)
+                {
+                    AddGoalsForMatches(team, 5);
+                    Console.WriteLine();
+                }
+
+                teams = teams.OrderByDescending(t => t.GetTeamStatistics().Sum).ToList(); //sortowanie wzdlędem sumy goli
+
+                foreach (var team in teams)
+                {
+                    DisplayTeamStatistics(team);
+                }
+
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+            else
             {
-                DisplayTeamStatistics(team);
+                Console.WriteLine("Invalid input. Please enter a valid number of teams or 'Q' to quit.");
             }
         }
-        else
-        {
-            Console.WriteLine("Invalid input. Please enter a valid number of teams.");
-        }
-
-        Console.WriteLine("Press any key to exit...");
-        Console.ReadKey();
     }
 
     private static void TeamGoalAdded(object sender, EventArgs args)
@@ -53,10 +66,10 @@ class FBTS
 
         for (int matchNumber = 1; matchNumber <= numberOfMatches; matchNumber++)
         {
-            Console.Write($"Enter goals for match {matchNumber} (type 'walk' for 0 goals): ");
+            Console.Write($"Enter goals for match {matchNumber} (you can enter a 'walkover' value this will add 0 goals) :");
             string input = Console.ReadLine();
 
-            if (input.ToLower() == "walk")
+            if (input.ToLower() == "walkover")
             {
                 team.AddGoal(0);
             }
@@ -70,6 +83,7 @@ class FBTS
                 matchNumber--;
             }
         }
+        Console.WriteLine("\nStatistics for all Teams (ordered by descending):\n");
     }
 
     private static void DisplayTeamStatistics(ITeam team)
@@ -82,8 +96,6 @@ class FBTS
         Console.WriteLine($"Average Goals: {statistics.Average}");
         Console.WriteLine($"Min Goals: {statistics.Min}");
         Console.WriteLine($"Max Goals: {statistics.Max}");
-        Console.WriteLine($"Average Letter: {statistics.AverageLetter}");
-
-        Console.WriteLine();
+        Console.WriteLine($"Average Letter: {statistics.AverageLetter}\n");
     }
 }
