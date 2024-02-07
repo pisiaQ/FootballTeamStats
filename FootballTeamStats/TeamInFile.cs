@@ -7,7 +7,7 @@
         public TeamInFile(string teamName)
             : base(teamName)
         {
-            FileName = $"{teamName.ToLower()}_goals.txt"; //nazwa zespołu w nazwie pliku (tworzy pliki z nazwą zespołu)
+            FileName = $"{teamName.ToLower()}_goals.txt"; 
         }
 
         public override void AddGoal(int goals)

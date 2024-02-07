@@ -38,7 +38,7 @@ class FBTS
                     Console.WriteLine();
                 }
 
-                teams = teams.OrderByDescending(t => t.GetTeamStatistics().Sum).ToList(); //sortowanie względem sumy goli
+                teams = teams.OrderByDescending(t => t.GetTeamStatistics().Sum).ToList(); //sortowanie względem sumy goli (malejąco)
 
                 foreach (var team in teams)
                 {
