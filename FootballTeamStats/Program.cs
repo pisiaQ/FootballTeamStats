@@ -39,7 +39,7 @@ class FBTS
                 }
 
                 teams = teams.OrderByDescending(t => t.GetTeamStatistics().Sum).ToList(); //sortowanie względem sumy goli (malejąco)
-
+                Console.WriteLine("\nStatistics for all Teams (ordered by descending):\n");
                 foreach (var team in teams)
                 {
                     DisplayTeamStatistics(team);
@@ -66,7 +66,7 @@ class FBTS
 
         for (int matchNumber = 1; matchNumber <= numberOfMatches; matchNumber++)
         {
-            Console.Write($"Enter goals for match {matchNumber} (you can enter a 'walkover' value this will add 0 goals) :");
+            Console.Write($"Enter goals for match {matchNumber} (you can enter a 'walkover' value, this will add 0 goals) :");
             string input = Console.ReadLine();
 
             if (input.ToLower() == "walkover")
@@ -83,7 +83,6 @@ class FBTS
                 matchNumber--;
             }
         }
-        Console.WriteLine("\nStatistics for all Teams (ordered by descending):\n");
     }
 
     private static void DisplayTeamStatistics(ITeam team)
