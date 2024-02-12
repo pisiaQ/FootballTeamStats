@@ -17,6 +17,7 @@
                 writer.WriteLine(goals);
             }
             base.OnGoalAdded();
+            base.AddToTeamGoalSum(goals);
 
             Console.WriteLine($"Goals added to {TeamName}. Data saved to file: {FileName}");
         }

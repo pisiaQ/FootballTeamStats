@@ -15,13 +15,6 @@
         }
 
         public abstract void AddGoal(int goals);
-        public void AddGoal(int[] goals)
-        {
-            foreach (var goal in goals)
-            {
-                AddGoal(goal);
-            }
-        }
 
         public abstract Statistics GetTeamStatistics();
 
